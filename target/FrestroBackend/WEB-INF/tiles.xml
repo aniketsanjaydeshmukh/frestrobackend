@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE tiles-definitions PUBLIC  
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"  
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">  
+<tiles-definitions>  
+    <definition name="base.definition" template="/WEB-INF/layout/layout.jsp">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="header" value="" /> 
+        <put-attribute name="logo" value="/WEB-INF/layout/logo.jsp" /> 
+        <put-attribute name="menu" value="" />  
+        <put-attribute name="body" value="" />  
+        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />  
+    </definition>  
+    <definition name="admin.definition"  
+        template="/WEB-INF/layout/admin_layout.jsp">  
+        <put-attribute name="title" value="EmployeeMangement" />  
+        <put-attribute name="header" value="/WEB-INF/layout/admin_header.jsp" />  
+        <put-attribute name="logo" value="/WEB-INF/layout/logo.jsp" />
+        <put-attribute name="menu" value="" />  
+        <put-attribute name="body" value="" />  
+        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />  
+    </definition>  
+
+
+	<definition name="schooladmin.definition"  
+        template="/WEB-INF/layout/admin_layout.jsp">  
+        <put-attribute name="title" value="userMangement" />  
+        <put-attribute name="header" value="/WEB-INF/layout/schooladmin_header.jsp" />  
+        <put-attribute name="logo" value="/WEB-INF/layout/logo.jsp" />
+        <put-attribute name="menu" value="" />  
+        <put-attribute name="body" value="" />  
+        <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />  
+    </definition>  
+	
+    <definition name="login" template="/WEB-INF/jsp/login.jsp">       
+    </definition>  
+  
+    <definition name="index" extends="base.definition">  
+        <put-attribute name="title" value="Hello Spring MVC" />  
+        <put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />  
+    </definition>  
+     
+    <definition name="admin_home" extends="admin.definition">  
+        <put-attribute name="title" value="Admin" />     
+        <put-attribute name="body" value="/WEB-INF/jsp/admin_home.jsp" />  
+    </definition>
+    
+     <definition name="schoolList" extends="admin.definition" >  
+        <!-- <put-attribute name="menu" value="/WEB-INF/layout/admin_menu.jsp" />   -->
+        <put-attribute name="body" value="/WEB-INF/jsp/schoolList.jsp"></put-attribute>  
+    </definition>  
+    
+    
+    <definition name="projectList" extends="admin.definition" >  
+        <!-- <put-attribute name="menu" value="/WEB-INF/layout/admin_menu.jsp" />   -->
+        <put-attribute name="body" value="/WEB-INF/jsp/projectList.jsp"></put-attribute>  
+    </definition> 
+    
+    <definition name="schoolAdmin" extends="admin.definition" >  
+        <!-- <put-attribute name="menu" value="/WEB-INF/layout/admin_menu.jsp" />   -->
+        <put-attribute name="body" value="/WEB-INF/jsp/schoolAdmin.jsp"></put-attribute>  
+    </definition> 
+
+	
+    <definition name="reports" extends="admin.definition" >  
+        <!-- <put-attribute name="menu" value="/WEB-INF/layout/admin_menu.jsp" /> -->  
+        <put-attribute name="body" value="/WEB-INF/jsp/reports.jsp"></put-attribute>  
+    </definition>
+	
+	<definition name="settings" extends="admin.definition" >  
+        <!-- <put-attribute name="menu" value="/WEB-INF/layout/admin_menu.jsp" /> -->  
+        <put-attribute name="body" value="/WEB-INF/jsp/settings.jsp"></put-attribute>  
+    </definition>
+	 
+</tiles-definitions>  

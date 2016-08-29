@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:component-scan base-package="com.frestro" />
+	<mvc:annotation-driven />
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/FrestroDB" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.frestro.model.Customer</value>
+				<value>com.frestro.model.Owner</value>
+				<value>com.frestro.model.Restaurant</value>
+				<value>com.frestro.model.Dish</value>
+				<value>com.frestro.model.SpecialOffer</value>
+				<value>com.frestro.model.Event</value>
+				<value>com.frestro.model.VerificationToken</value>
+				<value>com.frestro.model.ResetPasswordToken</value>
+				<value>com.frestro.model.Admin</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	
+
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="persistenceExceptionTranslationPostProcessor"
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<bean id="CustomerDao" class="com.frestro.dao.CustomerDaoImpl"></bean>
+	<bean id="CustomerServices" class="com.frestro.services.CustomerServicesImpl"></bean>
+
+	<bean id="OwnerDao" class="com.frestro.dao.OwnerDaoImpl"></bean>
+	<bean id="OwnerServices" class="com.frestro.services.OwnerServicesImpl"></bean>
+	
+	<bean id="RestaurantDao" class="com.frestro.dao.RestaurantDaoImpl"></bean>
+	<bean id="RestaurantServices" class="com.frestro.services.RestaurantServicesImpl"></bean>
+	
+	<bean id="DishDao" class="com.frestro.dao.DishDaoImpl"></bean>
+	<bean id="DishServices" class="com.frestro.services.DishServicesImpl"></bean>
+	
+	<bean id="SpecialOfferDao" class="com.frestro.dao.SpecialOfferDaoImpl"></bean>
+	<bean id="SpecialOfferServices" class="com.frestro.services.SpecialOfferServicesImpl"></bean>
+	
+	<bean id="EventDao" class="com.frestro.dao.EventDaoImpl"></bean>
+	<bean id="EventServices" class="com.frestro.services.EventServicesImpl"></bean>
+	
+	<bean id="VerificationTokenDao" class="com.frestro.dao.VerificationTokenDaoImpl"></bean>
+	<bean id="VerificationTokenServices" class="com.frestro.services.VerificationTokenServicesImpl"></bean>
+	
+	<bean id="AdminDao" class="com.frestro.dao.AdminDaoImpl"></bean>
+	<bean id="AdminServices" class="com.frestro.services.AdminServicesImpl"></bean>
+	
+	<bean id="ResetPasswordTokenDao" class="com.frestro.dao.ResetPasswordTokenDaoImpl"></bean>
+	<bean id="ResetPasswordTokenServices" class="com.frestro.services.ResetPasswordTokenServicesImpl"></bean>
+	
+</beans>

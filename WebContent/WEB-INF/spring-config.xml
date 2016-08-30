@@ -37,6 +37,9 @@
 				<value>com.frestro.model.Orders</value>
 				<value>com.frestro.model.OrderDish</value>
 				<value>com.frestro.model.Bill</value>
+				<value>com.frestro.model.RestaurantHistory</value>
+				<value>com.frestro.model.Ambience</value>
+				<value>com.frestro.model.DishPhoto</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -86,5 +89,14 @@
 	
 	<bean id="TablesDao" class="com.frestro.dao.TablesDaoImpl"></bean>
 	<bean id="TablesServices" class="com.frestro.services.TablesServicesImpl"></bean>
+	
+	<bean id="RestaurantHistoryDao" class="com.frestro.dao.RestaurantHistoryDaoImpl"></bean>
+	<bean id="RestaurantHistoryServices" class="com.frestro.services.RestaurantHistoryServicesImpl"></bean>
+	
+	<bean id="AmbienceDao" class="com.frestro.dao.AmbienceDaoImpl"></bean>
+	<bean id="AmbienceServices" class="com.frestro.services.AmbienceServicesImpl"></bean>
+	
+	<bean id="DishPhotoDao" class="com.frestro.dao.DishPhotoDaoImpl"></bean>
+	<bean id="DishPhotoServices" class="com.frestro.services.DishPhotoServicesImpl"></bean>
 	
 </beans>

@@ -28,24 +28,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.frestro.dto.AmbienceDTO;
 import com.frestro.dto.DishDTO;
+import com.frestro.dto.DishPhotoDTO;
 import com.frestro.dto.EventDTO;
 import com.frestro.dto.OwnerDTO;
 import com.frestro.dto.RestaurantDTO;
+import com.frestro.dto.RestaurantHistoryDTO;
 import com.frestro.dto.SpecialOfferDTO;
 import com.frestro.dto.TablesDTO;
+import com.frestro.model.Ambience;
 import com.frestro.model.Dish;
+import com.frestro.model.DishPhoto;
 import com.frestro.model.Event;
 import com.frestro.model.Owner;
 import com.frestro.model.Restaurant;
+import com.frestro.model.RestaurantHistory;
 import com.frestro.model.SpecialOffer;
 import com.frestro.model.Tables;
 import com.frestro.model.VerificationToken;
 import com.frestro.services.AdminServices;
+import com.frestro.services.AmbienceServices;
 import com.frestro.services.CustomerServices;
+import com.frestro.services.DishPhotoServices;
 import com.frestro.services.DishServices;
 import com.frestro.services.EventServices;
 import com.frestro.services.OwnerServices;
+import com.frestro.services.RestaurantHistoryServices;
 import com.frestro.services.RestaurantServices;
 import com.frestro.services.SpecialOfferServices;
 import com.frestro.services.TablesServices;
@@ -84,6 +93,15 @@ public class OwnerController {
 	
 	@Autowired
 	TablesServices tablesServices;
+	
+	@Autowired
+	RestaurantHistoryServices restaurantHistoryServices; 
+	
+	@Autowired
+	AmbienceServices ambienceServices;
+	
+	@Autowired
+	DishPhotoServices dishPhotoServices; 
 	
 	public static HashMap<String, String> ownerMap = new HashMap<String, String>();
 	
@@ -890,6 +908,180 @@ public class OwnerController {
 		response.getWriter().print(new JSONSerializer().exclude("class","*.class","authorities").deepSerialize(obj));
 	}
 	
+	@RequestMapping(value = "/addRestaurantHistory/", method = RequestMethod.POST, headers = "content-type=application/json")
+	public @ResponseBody
+	void addRestaurantHistory(@RequestBody RestaurantHistoryDTO[] restaurantHistoryDTO,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		Map<String,Object> obj = new HashMap<String,Object>();
+		OwnerController oc = new OwnerController();
+		HashMap<String, String> user = oc.getOwnermap();
+		Object key = user.get(restaurantHistoryDTO[0].getSessionId());
+		if(key != null){
+			Object keyId = user.get("ownerId"+restaurantHistoryDTO[0].getSessionId());
+			long checkerId = Long.parseLong(keyId.toString());
+			Owner owner = ownerServices.getOwnerById(checkerId);
+			
+			if(owner != null){
+				Restaurant restaurant = restaurantServices.getRestaurantById(restaurantHistoryDTO[0].getRestaurantId());
+				if(restaurant != null){
+					for (RestaurantHistoryDTO ambienceDTO2 : restaurantHistoryDTO) {
+						RestaurantHistory rh = new RestaurantHistory(ambienceDTO2);
+						rh.setRestaurant(restaurant);
+						if(restaurantHistoryServices.addOrUpdateRestaurantHistory(rh)){
+							obj.put("restaurantHistory", "added");
+						}
+					}
+				}
+			}
+		}
+		response.setContentType("application/json; charset=UTF-8"); 
+		response.getWriter().print(new JSONSerializer().exclude("class","*.class","authorities").deepSerialize(obj));
+	}
+	
+	@RequestMapping(value = "/listRestaurantHistory/", method = RequestMethod.POST, headers = "content-type=application/json")
+	public @ResponseBody
+	void listRestaurantHistory(@RequestBody RestaurantHistoryDTO restaurantHistoryDTO,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		Set<Map<String,Object>> listRestaurantHistory = new HashSet<Map<String,Object>>();
+		OwnerController oc = new OwnerController();
+		HashMap<String, String> user = oc.getOwnermap();
+		Object key = user.get(restaurantHistoryDTO.getSessionId());
+		if(key != null){
+			Object keyId = user.get("ownerId"+restaurantHistoryDTO.getSessionId());
+			long checkerId = Long.parseLong(keyId.toString());
+			Owner owner = ownerServices.getOwnerById(checkerId);
+			
+			if(owner != null){
+				Restaurant restaurant = restaurantServices.getRestaurantById(restaurantHistoryDTO.getRestaurantId());
+				if(restaurant != null){
+					Set<RestaurantHistory> restaurantHistoryList = restaurantHistoryServices.getRestaurantHistoryByRestaurant(restaurant.getId());
+					for (RestaurantHistory rh : restaurantHistoryList) {
+						Map<String,Object> obj = new HashMap<String,Object>();
+						obj.put("id", rh.getId());
+						obj.put("date", rh.getDate());
+						obj.put("description", rh.getDescription());
+						listRestaurantHistory.add(obj);
+					}
+				}
+			}
+		}
+		response.setContentType("application/json; charset=UTF-8"); 
+		response.getWriter().print(new JSONSerializer().exclude("class","*.class","authorities").deepSerialize(listRestaurantHistory));
+	}
+	
+	@RequestMapping(value = "/addAmbience/", method = RequestMethod.POST, headers = "content-type=application/json")
+	public @ResponseBody
+	void addAmbience(@RequestBody AmbienceDTO[] ambienceDTO,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		Map<String,Object> obj = new HashMap<String,Object>();
+		OwnerController oc = new OwnerController();
+		HashMap<String, String> user = oc.getOwnermap();
+		Object key = user.get(ambienceDTO[0].getSessionId());
+		if(key != null){
+			Object keyId = user.get("ownerId"+ambienceDTO[0].getSessionId());
+			long checkerId = Long.parseLong(keyId.toString());
+			Owner owner = ownerServices.getOwnerById(checkerId);
+			
+			if(owner != null){
+				Restaurant restaurant = restaurantServices.getRestaurantById(ambienceDTO[0].getRestaurant());
+				if(restaurant != null){
+					for (AmbienceDTO ambienceDTO2 : ambienceDTO) {
+						Ambience ambience = new Ambience(ambienceDTO2);
+						ambience.setRestaurant(restaurant);
+						if(ambienceServices.addOrUpdateAmbiene(ambience)){
+							obj.put("ambience", "added");
+						}
+					}
+				}
+			}
+		}
+		response.setContentType("application/json; charset=UTF-8"); 
+		response.getWriter().print(new JSONSerializer().exclude("class","*.class","authorities").deepSerialize(obj));
+	}
+	
+	@RequestMapping(value = "/listAmbience/", method = RequestMethod.POST, headers = "content-type=application/json")
+	public @ResponseBody
+	void listAmbience(@RequestBody AmbienceDTO ambienceDTO,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		Set<Map<String,Object>> listAmbience = new HashSet<Map<String,Object>>();
+		OwnerController oc = new OwnerController();
+		HashMap<String, String> user = oc.getOwnermap();
+		Object key = user.get(ambienceDTO.getSessionId());
+		if(key != null){
+			Object keyId = user.get("ownerId"+ambienceDTO.getSessionId());
+			long checkerId = Long.parseLong(keyId.toString());
+			Owner owner = ownerServices.getOwnerById(checkerId);
+			
+			if(owner != null){
+				Restaurant restaurant = restaurantServices.getRestaurantById(ambienceDTO.getRestaurant());
+				if(restaurant != null){
+					Set<Ambience> ambienceList = ambienceServices.getAmbienceByRestaurant(restaurant.getId());
+					for (Ambience ambience : ambienceList) {
+						Map<String,Object> obj = new HashMap<String,Object>();
+						obj.put("id", ambience.getId());
+						obj.put("url", ambience.getUrl());
+						listAmbience.add(obj);
+					}
+				}
+			}
+		}
+		response.setContentType("application/json; charset=UTF-8"); 
+		response.getWriter().print(new JSONSerializer().exclude("class","*.class","authorities").deepSerialize(listAmbience));
+	}
+	
+	@RequestMapping(value = "/addDishPhoto/", method = RequestMethod.POST, headers = "content-type=application/json")
+	public @ResponseBody
+	void addDishPhoto(@RequestBody DishPhotoDTO[] dishPhotoDTO,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		Map<String,Object> obj = new HashMap<String,Object>();
+		OwnerController oc = new OwnerController();
+		HashMap<String, String> user = oc.getOwnermap();
+		Object key = user.get(dishPhotoDTO[0].getSessionId());
+		if(key != null){
+			Object keyId = user.get("ownerId"+dishPhotoDTO[0].getSessionId());
+			long checkerId = Long.parseLong(keyId.toString());
+			Owner owner = ownerServices.getOwnerById(checkerId);
+			
+			if(owner != null){
+				Dish dish = dishServices.getDishById(dishPhotoDTO[0].getDish());
+				if(dish != null){
+					for (DishPhotoDTO dishPhotoDTO2 : dishPhotoDTO) {
+						DishPhoto dishPhoto = new DishPhoto(dishPhotoDTO2);
+						dishPhoto.setDish(dish);
+						if(dishPhotoServices.addOrUpdateDishPhoto(dishPhoto)){
+							obj.put("dishPhoto", "added");
+						}
+					}
+				}
+			}
+		}
+		response.setContentType("application/json; charset=UTF-8"); 
+		response.getWriter().print(new JSONSerializer().exclude("class","*.class","authorities").deepSerialize(obj));
+	}
+	
+	@RequestMapping(value = "/listDishPhoto/", method = RequestMethod.POST, headers = "content-type=application/json")
+	public @ResponseBody
+	void listAmbience(@RequestBody DishPhotoDTO dishPhotoDTO,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		Set<Map<String,Object>> listDishPhoto = new HashSet<Map<String,Object>>();
+		OwnerController oc = new OwnerController();
+		HashMap<String, String> user = oc.getOwnermap();
+		Object key = user.get(dishPhotoDTO.getSessionId());
+		if(key != null){
+			Object keyId = user.get("ownerId"+dishPhotoDTO.getSessionId());
+			long checkerId = Long.parseLong(keyId.toString());
+			Owner owner = ownerServices.getOwnerById(checkerId);
+			
+			if(owner != null){
+				Dish dish = dishServices.getDishById(dishPhotoDTO.getDish());
+				if(dish != null){
+					Set<DishPhoto> dishPhotoList = dishPhotoServices.getDishPhotoByDish(dish.getId());
+					for (DishPhoto dishPhoto : dishPhotoList) {
+						Map<String,Object> obj = new HashMap<String,Object>();
+						obj.put("id", dishPhoto.getId());
+						obj.put("url", dishPhoto.getUrl());
+						listDishPhoto.add(obj);
+					}
+				}
+			}
+		}
+		response.setContentType("application/json; charset=UTF-8"); 
+		response.getWriter().print(new JSONSerializer().exclude("class","*.class","authorities").deepSerialize(listDishPhoto));
+	}
 	public HashMap<String, String> getOwnermap() {    
 	    return ownerMap;
 	}

@@ -7,11 +7,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -57,10 +59,12 @@ public class Dish implements Serializable{
 	@ManyToMany(mappedBy="dishes")
 	private Set<SpecialOffer> specialOffers = new HashSet<SpecialOffer>();
 	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="orderDish")
+	@ManyToOne
 	private OrderDish orderDish;
 
+	@OneToMany(fetch = FetchType.EAGER,targetEntity=DishPhoto.class,cascade=CascadeType.ALL, mappedBy="dish")
+	private Set<DishPhoto> dishPhoto;
+	
 	public Dish(DishDTO dishDTO){
 		this.name=dishDTO.getName();
 		this.price=dishDTO.getPrice();
@@ -143,6 +147,14 @@ public class Dish implements Serializable{
 
 	public void setOrderDish(OrderDish orderDish) {
 		this.orderDish = orderDish;
+	}
+
+	public Set<DishPhoto> getDishPhoto() {
+		return dishPhoto;
+	}
+
+	public void setDishPhoto(Set<DishPhoto> dishPhoto) {
+		this.dishPhoto = dishPhoto;
 	}
 	
 }

@@ -81,6 +81,12 @@ public class Restaurant implements Serializable{
 	@OneToMany(fetch = FetchType.EAGER,mappedBy="restaurant")
 	private Set<Tables> tables;
 	
+	@OneToMany(fetch = FetchType.EAGER,targetEntity=RestaurantHistory.class,cascade=CascadeType.ALL, mappedBy="restaurant")
+	private Set<RestaurantHistory> restaurantHistory;
+	
+	@OneToMany(fetch = FetchType.EAGER,targetEntity=Ambience.class,cascade=CascadeType.ALL, mappedBy="restaurant")
+	private Set<Ambience> ambience;
+	
 	@Column(name = "city")
 	private String city;
 	
@@ -262,5 +268,21 @@ public class Restaurant implements Serializable{
 
 	public void setArea(String area) {
 		this.area = area;
+	}
+
+	public Set<RestaurantHistory> getRestaurantHistory() {
+		return restaurantHistory;
+	}
+
+	public void setRestaurantHistory(Set<RestaurantHistory> restaurantHistory) {
+		this.restaurantHistory = restaurantHistory;
+	}
+
+	public Set<Ambience> getAmbience() {
+		return ambience;
+	}
+
+	public void setAmbience(Set<Ambience> ambience) {
+		this.ambience = ambience;
 	}
 }
